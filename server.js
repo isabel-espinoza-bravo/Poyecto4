@@ -1,12 +1,12 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const rutasReservas = require('./routes/reservasRoutes');
+const reservasRouter = require('./routes/reservasRoutes');
 
 dotenv.config();
 const app = express();
 
 app.use(express.json());
-app.use(rutasReservas);
+app.use('/api', reservasRouter); 
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

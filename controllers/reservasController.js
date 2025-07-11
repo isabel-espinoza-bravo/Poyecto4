@@ -28,16 +28,47 @@ function crearReserva(req, res) {
 
 function obtenerReservas(req, res) {
   let reservas = leerReservas();
-  const { hotel, tipo_habitacion, estado, num_huespedes, fecha_inicio, fecha_fin } = req.query;
+  const {
+    hotel,
+    tipo_habitacion,
+    estado,
+    num_huespedes,
+    fecha_inicio,
+    fecha_fin
+  } = req.query;
 
-  if (hotel) reservas = reservas.filter(r => r.hotel === hotel);
-  if (tipo_habitacion) reservas = reservas.filter(r => r.tipo_habitacion === tipo_habitacion);
-  if (estado) reservas = reservas.filter(r => r.estado === estado);
-  if (num_huespedes) reservas = reservas.filter(r => r.num_huespedes == num_huespedes);
-  if (fecha_inicio && fecha_fin) {
+  if (hotel) {
     reservas = reservas.filter(r =>
-      r.fecha_inicio >= fecha_inicio && r.fecha_fin <= fecha_fin
+      r.hotel.toLowerCase() === hotel.toLowerCase()
     );
+  }
+
+  if (tipo_habitacion) {
+    reservas = reservas.filter(r =>
+      r.tipo_habitacion.toLowerCase() === tipo_habitacion.toLowerCase()
+    );
+  }
+
+  if (estado) {
+    reservas = reservas.filter(r =>
+      r.estado.toLowerCase() === estado.toLowerCase()
+    );
+  }
+
+  if (num_huespedes) {
+    reservas = reservas.filter(r =>
+      Number(r.num_huespedes) === Number(num_huespedes)
+    );
+  }
+
+  if (fecha_inicio && fecha_fin) {
+    const inicio = new Date(fecha_inicio);
+    const fin = new Date(fecha_fin);
+    reservas = reservas.filter(r => {
+      const r_inicio = new Date(r.fecha_inicio);
+      const r_fin = new Date(r.fecha_fin);
+      return r_inicio >= inicio && r_fin <= fin;
+    });
   }
 
   res.json(reservas);
@@ -46,10 +77,10 @@ function obtenerReservas(req, res) {
 function obtenerReservaPorId(req, res) {
   const reservas = leerReservas();
   const reserva = reservas.find(r => r.id === req.params.id);
-  if (reserva) {
-    res.json(reserva);
+  if (!reserva) {
+    res.status(404).json({ mensaje: "Reserva no encontrada" });
   } else {
-    res.status(404).json({ mensaje: "No se encontró la reserva" });
+    res.json(reserva);
   }
 }
 
@@ -83,3 +114,4 @@ module.exports = {
   actualizarReserva,
   eliminarReserva
 };
+

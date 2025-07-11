@@ -8,10 +8,10 @@ const {
   eliminarReserva
 } = require('../controllers/reservasController');
 
-router.post('/api/reservas', crearReserva);
-router.get('/api/reservas', obtenerReservas);
-router.get('/api/reservas/:id', obtenerReservaPorId);
-router.put('/api/reservas/:id', actualizarReserva);
-router.delete('/api/reservas/:id', eliminarReserva);
+router.post('/reservas', crearReserva);
+router.get('/reservas', obtenerReservas);
+router.get('/reservas/:id', obtenerReservaPorId);
+router.put('/reservas/:id', actualizarReserva);
+router.delete('/reservas/:id', eliminarReserva);
 
 module.exports = router;
